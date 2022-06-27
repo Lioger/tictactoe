@@ -215,6 +215,7 @@ document.onkeyup = (e) => { // слушаем клики по клавиатур
 const onAdError = (adErrorEvent) => {
   console.error(adErrorEvent.getError());
   if (adsManager) adsManager.destroy();
+  closeAd();
 };
 
 const onAdLoaded = (adEvent) => {
@@ -225,7 +226,7 @@ const onAdsManagerLoaded = (adsManagerLoadedEvent) => {
   adsManager = adsManagerLoadedEvent.getAdsManager(adVideoEl);
   adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError);
   adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, adVideoEl.pause);
-  adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, videoElement.play);
+  adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, adVideoEl.play);
   adsManager.addEventListener(google.ima.AdEvent.Type.LOADED, onAdLoaded);
 };
 
