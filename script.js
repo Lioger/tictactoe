@@ -218,37 +218,25 @@ const onAdError = (adErrorEvent) => {
   closeAd();
 };
 
-const onAdLoaded = (adEvent) => {
-  if (!adEvent.getAd().isLinear()) adVideoEl.play();
-}
-
 const onAdsManagerLoaded = (adsManagerLoadedEvent) => {
   adsManager = adsManagerLoadedEvent.getAdsManager(adVideoEl);
   adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError);
   adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED, adVideoEl.pause);
   adsManager.addEventListener(google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED, adVideoEl.play);
-  adsManager.addEventListener(google.ima.AdEvent.Type.LOADED, onAdLoaded);
 };
-
-const adContainerClick = () => adVideoEl.paused ? adVideoEl.play() : adVideoEl.pause();
 
 const initializeIMA = () => {
   console.log("initializing IMA");
-  adContainer.addEventListener('click', adContainerClick);
   adDisplayContainer = new google.ima.AdDisplayContainer(adContainer, adVideoEl);
   adsLoader = new google.ima.AdsLoader(adDisplayContainer);
   adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, onAdsManagerLoaded, false);
   adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false);
   adVideoEl.addEventListener('ended', () => {
     adsLoader.contentComplete();
-    console.log('video ended');
     closeAd();
   });
   let adsRequest = new google.ima.AdsRequest();
-  adsRequest.adTagUrl = 'https://pubads.g.doubleclick.net/gampad/ads?' +
-      'iu=/21775744923/external/single_ad_samples&sz=640x480&' +
-      'cust_params=sample_ct%3Dlinear&ciu_szs=300x250%2C728x90&' +
-      'gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=';
+  adsRequest.adTagUrl = 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=';
   adsRequest.linearAdSlotWidth = 640;
   adsRequest.linearAdSlotHeight = 360;
   adsRequest.nonLinearAdSlotWidth = 640;
